@@ -1,4 +1,4 @@
-    import User from "../02_Model/User.model.js";
+import User from "../02_Model/User.model.js";
 
     const activate = async(req, res) => {
         try {
@@ -232,6 +232,7 @@
 
             res.status(200).json({
                 message: `User restored successfully`,
+                totalUsers: users.length,
                 data: user,
             })
 
@@ -242,59 +243,45 @@
         }
     }
 
-    const userList = async(req, res) => {
+    const userListSuperAdmin = async(req, res) => {
         try {
-            const user = req.user;
-
             const { role, isActive, isDeleted } = req.query;
 
             const filter = {};
-
-            if(!user){
-                return res.status(400).json({
-                    message: "Wrong User info Kindly Login"
-                })
-            }
 
             if(role){
                 filter.role = role;
             }
 
-            if(isActive){
+            if(isActive !== undefined){
                 filter.isActive = isActive === "true";
             }
 
-            if(isDeleted){
+            if(isDeleted !== undefined){
                 filter.isDeleted = isDeleted === "true";
             }
 
-            let Users;
-            
-            if(user.role === "Super_Admin"){
-                 Users = await User.find(filter);
-            }else if(user.role === "Admin"){
-                Users = await User.find({role: "Employee", ...filter})
-            }else{
-                return res.status(403).json({
-                    message: "Not authorize to see other Users"
-                })
-            }
             let msg;
-            if((Users.length === 0)){
+
+
+            const users = await User.find(filter);
+            
+            if((users.length === 0)){
                 if(Object.keys(filter).length > 0){
-                    const mesg = Object.entries(filter).map(([key, value]) => `${Key} is ${value}`).join(", ");
+                    const mesg = Object.entries(filter).map(([key, value]) => `${key} is ${value}`).join(", ");
                     msg = `No User Found when ${mesg}`
                 }else{
                     msg = "No User Found"
                 }
             }else{
-                msg = "User Found Sucessfully"
+                msg = "User Found Successfully"
             }
             
 
             res.status(200).json({
                 message : msg,
-                data: Users,
+                totalUsers: users.length,
+                data: users,
             })
 
         } catch (error) {
@@ -304,4 +291,51 @@
         }
     }
 
-    export {activate, deactivate, promote, demote, softDelete, restoreUser, userList};
+        const userListAdmin = async(req, res) => {
+        try {
+            const {isActive, isDeleted } = req.query;
+
+            const filter = {};
+
+            filter.role = "Employee";
+
+            if(isActive !== undefined){
+                filter.isActive = isActive === "true";
+            }
+
+            if(isDeleted !== undefined){
+                filter.isDeleted = isDeleted === "true";
+            }
+
+            let msg;
+
+
+            const users = await User.find(filter);
+            
+            if((users.length === 0)){
+                if(Object.keys(filter).length > 0){
+                    const mesg = Object.entries(filter).map(([key, value]) => `${key} is ${value}`).join(", ");
+                    msg = `No User Found when ${mesg}`
+                }else{
+                    msg = "No User Found"
+                }
+            }else{
+                msg = "User Found Successfully"
+            }
+            
+
+            res.status(200).json({
+                message : msg,
+                data: users,
+            })
+
+        } catch (error) {
+            res.status(500).json({
+                message: `Server Error: ${error.message}`
+            })
+        }
+    }
+
+
+
+    export {activate, deactivate, promote, demote, softDelete, restoreUser, userListSuperAdmin, userListAdmin};

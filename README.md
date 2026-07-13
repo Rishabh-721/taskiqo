@@ -22,6 +22,7 @@ Taskiqo is a MERN stack role-based task management system that enables organizat
 - Activate/Deactivate Users
 - Promote/Demote Users
 - Soft Delete & Restore Users
+- User Search and Filtering
 
 ### Task Management
 - Create Task
@@ -32,6 +33,14 @@ Taskiqo is a MERN stack role-based task management system that enables organizat
 - Task Priority
 - Due Date Management
 - Task Listing
+- Task Search & Filtering
+- Employee Task View
+- Admin Task View
+
+### Workflow
+- Pending -> In Progress
+- Task Status Updates
+- Dashboard Statistics
 
 ---
 
@@ -74,6 +83,7 @@ Backend/
 - Manage users
 - Activate/Deactivate accounts
 - Promote/Demote users
+- View dashboard
 - View all tasks
 - Reassign Admin
 
@@ -82,10 +92,14 @@ Backend/
 - Update tasks
 - Delete tasks
 - Assign/Reassign employees
+- Review employee Progress
+- View dashboard
 
 ### Employee
 - Login after approval
 - View assigned tasks
+- Update task status
+- View personal dashboard
 
 ---
 
@@ -93,10 +107,11 @@ Backend/
 
 - ✅ Authentication Module Completed
 - ✅ User Management Module Completed
-- ✅ Task Management Backend Completed
-- 🔄 Task Workflow & Dashboard APIs (Next)
+- ✅ Task Management Module Completed
+- ✅ Task Workflow Completed
+- ✅ Dashboard APIs Completed
 - ⏳ React Frontend
-
+- ⏳ Deployment
 ---
 
 ## 📅 Roadmap
@@ -104,12 +119,61 @@ Backend/
 - [x] Authentication
 - [x] User Management
 - [x] Task CRUD
-- [ ] Task Workflow
-- [ ] Dashboard
+- [x] Task Workflow
+- [x] Dashboard APIs
 - [ ] React Frontend
 - [ ] Deployment
 
 ---
+
+## 📡 API Modules
+
+- Authentication APIs
+- User APIs
+- Task APIs
+- Dashboard APIs
+
+## 🏗️ Architecture
+
+Client
+   │
+React
+   │
+Express REST API
+   │
+Authentication Middleware
+   │
+Role Middleware
+   │
+Controllers
+   │
+MongoDB
+
+## 📈 Development Timeline
+
+### Day 1 (10 July 2026)
+✔ Authentication
+✔ Signup/Login
+✔ JWT
+✔ User Schema
+
+### Day 2 (11 July 2026)
+✔ RBAC
+✔ User Management
+✔ Seed Super Admin
+
+### Day 3 (12 July 2026)
+✔ Task CRUD
+✔ Assignment
+✔ Priority
+✔ Due Dates
+
+### Day 4 (13 July 2026)
+✔ Filtering
+✔ Workflow
+✔ Employee Task APIs
+✔ Dashboard APIs
+
 
 ## 📄 License
 

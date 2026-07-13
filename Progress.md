@@ -1,43 +1,68 @@
 
 
-# Day 1 :- 10th July 2026 at 20:06 Tasks:- {
-    Project setup & MongoDB connection, Done at 20:39
-    Environment variables & User Schema, Done at 20:09
-    Password hashing (bcrypt) & JWT auth, Done at 22:15
-    Signup & Login APIs, Done at 23:17
-    Basic testing, Done at 23:40
-}
+# Step 1 
+Date: 10th July 2026
+Started: 20:06 
 
-# Day 2 : 11th July 2026 at 20:43 Tasks:- {
-    Authentication & Role Middleware, Done at 21:00
-    Profile API, Done at 21:04,
-# Took a break for dinner at 21:04 to 22:30
-    Activate/Deactivate & Promote/Demote Users, Done at 23:27
-    Soft Delete and Restore Users, Done at 23:39
-    User List API, Done at 23:58
-# Make some changes to My Project Tracking excel 23:58 to 12th July 2026 at 01:00
-    User Routes, Done at 01:05
-    Seed Super Admin, Done at 01:43
-# Break for 1: 43 to 2:01
-    Postman testing, Done at 02:18
-}
+Tasks:
+✅  Project setup & MongoDB connection (20:39)
+✅  Environment variables & User Schema (20:09)
+✅  Password hashing (bcrypt) & JWT auth (22:15)
+✅  Signup & Login APIs (23:17)
+✅  Basic testing (23:40)
 
-# Day 3 : 12th July 2026 at 11:57  Tasks:- {
-    Task Schema creation, Done at 12:10
-    Create & Update Task APIs, Done at 13:03
-    Delete Task API, Done at 13:23
-    Assign employees, Priority, & Due dates, Done at 14:03
-    Task Reassign & TaskList API, Done at 15:40
-    Task routes, Done at 15:47
-    Corrected User Read, Done at 16: 53
-    Postman testing, Done at 16:53
-}
+# Step 2 
+Date: 11th July 2026 
+Started: 20:43
 
-# Day 4 : 12th July 2026 at Tasks:- {
-    Task status flow (Pending -> In Progress)
-    Employee task APIs & Admin task views
-    Dashboard statistics calculations
-    Search & filtering endpoints
-    Workflow routes
-    Postman testing
-}
+Tasks: 
+✅  Authentication & Role Middleware (21:00)
+✅  Profile API (21:04,)
+
+Break: Dinner (21:04–22:30)
+
+✅  Activate/Deactivate & Promote/Demote Users (23:27)
+✅  Soft Delete and Restore Users (23:39)
+✅  User List API (23:58)
+
+Break: Updated Project Tracking Excel (23:58–01:00)
+
+✅  User Routes (01:05)
+✅  Seed Super Admin (01:43)
+
+Break: (01:43–02:01)
+
+✅  Postman testing (02:18)
+
+
+# Step 3 
+Date: 12th July 2026
+Started: 11:57  
+
+Tasks:
+✅  Task Schema creation (12:10)
+✅  Create & Update Task APIs (13:03)
+✅  Delete Task API (13:23)
+✅  Assign employees, Priority, & Due dates (14:03)
+✅  Task Reassign & TaskList API (15:40)
+✅  Task routes (15:47)
+✅  Corrected User Read (16: 53)
+✅  Postman testing (16:53)
+
+# Step 4 
+Date: 13th July 2026
+Started: 09:14
+ 
+Tasks:
+✅  Task List and User List Creted by user (10:16)
+✅  Search & filtering endpoints (10:16)
+✅  Task status flow (Pending -> In Progress) (11:57)
+✅  Employee task APIs & Admin task views (12:41)
+
+Break: (12:43 - 13:40)
+
+✅  Dashboard statistics calculations (14:39)
+✅  Workflow routes (14:41)
+✅  Postman testing (16:47)
+
+# Step 5

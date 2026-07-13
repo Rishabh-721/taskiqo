@@ -4,9 +4,11 @@ import auth from "../03_Middleware/Auth.Middleware.js";
 
 const route = Router();
 
+// Create
 route.post("/signup", signUp);
 route.post("/login", login);
-route.get("/profile", auth, profile);
 
+// Read
+route.get("/profile", auth, profile);
 
 export default route;

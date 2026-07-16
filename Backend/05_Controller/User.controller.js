@@ -25,6 +25,7 @@ import User from "../02_Model/User.model.js";
             }
 
             user.isActive = true;
+            user.sessionVersion++;
             await user.save()
             
 
@@ -68,6 +69,7 @@ import User from "../02_Model/User.model.js";
 
             
             user.isActive = false;
+            sessionVersion++;
             await user.save()
 
             res.status(200).json({
@@ -109,6 +111,7 @@ import User from "../02_Model/User.model.js";
             user.role = "Admin"
             }
 
+            user.sessionVersion++;
             await user.save();
             
             res.status(200).json({
@@ -149,6 +152,7 @@ import User from "../02_Model/User.model.js";
             user.role = "Admin"
             }
 
+            user.sessionVersion++;
             await user.save();
             
             res.status(200).json({
@@ -228,6 +232,7 @@ import User from "../02_Model/User.model.js";
             }
 
             user.isDeleted = false;
+            user.sessionVersion++;
             await user.save();
 
             res.status(200).json({

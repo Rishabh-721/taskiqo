@@ -3,7 +3,7 @@ import User from "../02_Model/User.model.js";
 
 const taskCreation = async (req, res) => {
     try {
-        const user = req.user;
+        const id = req.user.id;
 
 
         const {
@@ -39,7 +39,7 @@ const taskCreation = async (req, res) => {
         const task = await Task.create({
             title,
             description,
-            createdBy: user,
+            createdBy: id,
             priority,
             dueDate,
             status,
@@ -60,7 +60,7 @@ const taskCreation = async (req, res) => {
 
 const taskUpdate = async (req, res) => {
     try {
-        const user = req.user;
+        const userid = req.user.id;
         const id = req.params.id;
         const {
             title,
@@ -93,7 +93,7 @@ const taskUpdate = async (req, res) => {
             })
         }
 
-        if (task.createdBy.toString() !== user._id.toString()) {
+        if (task.createdBy.toString() !== userid.toString()) {
             return res.status(403).json({
                 message: "You are not authorized to update this task."
             });
@@ -122,7 +122,7 @@ const taskUpdate = async (req, res) => {
 
 const taskDelete = async (req, res) => {
     try {
-        const user = req.user;
+        const userid = req.user.id;
 
         const {
             id
@@ -136,7 +136,7 @@ const taskDelete = async (req, res) => {
             })
         }
 
-        if (!task.createdBy.equals(user._id)) {
+        if (!task.createdBy.equals(userid)) {
             return res.status(403).json({
                 message: "User is Unauthorize"
             })
@@ -267,7 +267,7 @@ const taskListSuperAdmin = async (req, res) => {
 
 const taskListAdmin = async (req, res) => {
     try {
-        const user = req.user;
+        const userid = req.user.id;
 
         const {
             priority,
@@ -278,7 +278,7 @@ const taskListAdmin = async (req, res) => {
 
         const filter = {};
 
-        filter.createdBy = user._id;
+        filter.createdBy = userid;
 
         if (priority) {
             filter.priority = priority;
@@ -320,7 +320,7 @@ const taskListAdmin = async (req, res) => {
 
 const taskListEmployee = async (req, res) => {
     try {
-        const user = req.user;
+        const userid = req.user.id;
 
         const {
             priority,
@@ -331,7 +331,7 @@ const taskListEmployee = async (req, res) => {
 
         const filter = {};
 
-        filter["assignedTo.user"] = user._id;
+        filter["assignedTo.user"] = userid;
 
         if (isCompleted !== undefined) {
             filter["assignedTo.isCompleted"] = isCompleted;
@@ -374,13 +374,7 @@ const taskListEmployee = async (req, res) => {
 const assignedIsCompleated = async (req, res) => {
     try {
         const assignedTaskId = req.params.id;
-        const user = req.user;
-
-        if (!user) {
-            return res.status(400).json({
-                message: "User not Found"
-            })
-        }
+        const userid = req.user.id;
 
         const task = await Task.findOne({
             "assignedTo._id": assignedTaskId
@@ -400,7 +394,7 @@ const assignedIsCompleated = async (req, res) => {
 
         const assignment = task.assignedTo.id(assignedTaskId);
 
-        if (!assignment.user.equals(user._id)) {
+        if (!assignment.user.equals(userid)) {
             return res.status(403).json({
                 message: "Not authorized"
             });
@@ -437,8 +431,8 @@ const assignedIsCompleated = async (req, res) => {
 const review = async(req, res) => {
     try {
     const taskId = req.params.id;
-    const user = req.user;
-    const {response, assignedTaskId} = req.body;
+    const userid = req.user.id;
+    const {assignedTaskId} = req.body;
 
     const task = await Task.findById(taskId);
 
@@ -448,33 +442,33 @@ const review = async(req, res) => {
         })
     }
 
-    if(!task.createdBy.equals(user._id)){
+    if(!task.createdBy.equals(userid)){
         return res.status(400).json({
             message: "Unorthorized"
         })
     }
-        
-    if(response === "Reject"){
-        if(!assignedTaskId){
+
+    if(!Array.isArray(assignedTaskId)){
             return res.status(404).json({
                 message: "Provide task assigned to id thats to be cancle"
             })
+    }
+        
+    if(assignedTaskId.length > 0){
+        
+    for(const id of assignedTaskId){
+        const assignment = task.assignedTo.id(id);
+        if(!assignment){
+            return res.status(404).json({
+                message: `Assignment ${id} not found`
+            });
         }
-        for(const id of assignedTaskId){
-            const assignment = task.assignedTo.id(id);
+        assignment.isCompleted = false;
+    }
 
-            if(!assignment){
-                return res.status(404).json({
-                    message: `Assignment ${id} not found`
-                });
-            }
+    const allCancled = task.assignedTo.every( a => !a.isCompleted);
 
-            assignment.isCompleted = false;
-        }
-
-        const allCancled = task.assignedTo.every( a => !a.isCompleted);
-
-        task.status = allCancled ? "Pending" : "In-Progress";
+    task.status = allCancled ? "Pending" : "In-Progress";
 
     }else{
         task.status = "Compleated"
@@ -493,63 +487,52 @@ const review = async(req, res) => {
         })
     }
 }
-const dashboardSuperAdmin = async(req, res) => {
+const dashboard = async(req, res) => {
     try {
+        const id = req.user.id;
+        const role = req.user.role;
 
-        const totalUsers = await User.countDocuments({isDeleted: false});
-        const actvieUsers = await User.countDocuments({isDeleted: false, isActive: true});
-        const inactiveUsers = await User.countDocuments({isDeleted: false, isActive: false});
-        const isSuperAdmin = await User.countDocuments({role : "Super_Admin"});
-        const isAdmin = await User.countDocuments({role : "Admin"});
-        const isEmployee = await User.countDocuments({role : "Employee"});
+        let dashboard = {};
 
-        const totalTasks = await Task.countDocuments();
-        const pendingTasks = await Task.countDocuments({status: "Pending"});
-        const inProgressTasks = await Task.countDocuments({status: "In-Progress"});
-        const submittedTasks = await Task.countDocuments({status: "Submitted"});
-        const compleatedTasks = await Task.countDocuments({status: "Compleated"});
+        if(role === "Super_Admin"){
+            dashboard = {
+            totalUsers : await User.countDocuments({isDeleted : false}),
+            activeUsers : await User.countDocuments({isDeleted : false, isActive: true}),
+            inactiveUsers : await User.countDocuments({isDeleted : false, isActive: false}),
+            deletedUsers : await User.countDocuments({isDeleted: true}),
 
-        const dashboard = {
-            totalUsers, actvieUsers, inactiveUsers, isSuperAdmin, isAdmin, isEmployee, totalTasks, pendingTasks, inProgressTasks, submittedTasks, compleatedTasks
+            isSuperAdmin : await User.countDocuments({isDeleted : false,role : "Super_Admin"}),
+            isAdmin : await User.countDocuments({isDeleted : false,role : "Admin"}),
+            isEmployee : await User.countDocuments({isDeleted : false,role : "Employee"}),
+
+            totalTasks : await Task.countDocuments(),
+            pendingTasks : await Task.countDocuments({status: "Pending"}),
+            inProgressTasks : await Task.countDocuments({status: "In-Progress"}),
+            submittedTasks : await Task.countDocuments({status: "Submitted"}),
+            completedTasks : await Task.countDocuments({status: "Compleated"}),
+            }
+        }else if(role === "Admin"){
+            dashboard = {
+                totalTasks : await Task.countDocuments({createdBy: id}),
+                pendingTasks : await Task.countDocuments({createdBy: id, status: "Pending"}),
+                inProgressTasks : await Task.countDocuments({createdBy: id,status: "In-Progress"}),
+                submittedTasks : await Task.countDocuments({createdBy: id,status: "Submitted"}),
+                completedTasks : await Task.countDocuments({createdBy: id,status: "Compleated"}),
+            }
+        }else if (role === "Employee") {
+            dashboard = {
+                totalTasks : await Task.countDocuments({"assignedTo.user": id}),
+                pendingTasks : await Task.countDocuments({"assignedTo.user": id, status: "Pending"}),
+                inProgressTasks : await Task.countDocuments({"assignedTo.user": id,status: "In-Progress"}),
+                submittedTasks : await Task.countDocuments({"assignedTo.user": id,status: "Submitted"}),
+                completedTasks : await Task.countDocuments({"assignedTo.user": id,status: "Compleated"}),
+            }
         }
 
         res.status(200).json({
             message: "Dashboard Created Sucessfully",
             data: dashboard,
         })
-
-    } catch (error) {
-        return res.status(500).json({
-            message: `Server Error: ${error.message}`
-        })
-    }
-}
-
-const dashboardNotSuperAdmin = async(req, res) => {
-    try {
-        const user = req.user;
-
-        let filter = {};
-        if(user.role === "Admin"){
-            filter.createdBy = user._id;
-        }else{
-            filter["assignedTo.user"] = user._id;
-        }
-
-        const totalTasks = await Task.countDocuments(filter);
-        const pendingTasks = await Task.countDocuments({status: "Pending", ...filter});
-        const inProgressTasks = await Task.countDocuments({status: "In-Progress", ...filter});
-        const submittedTasks = await Task.countDocuments({ status: "Submitted", ...filter});
-        const compleatedTasks = await Task.countDocuments({ status: "Compleated", ...filter});
-
-        const dashboard = {
-            totalTasks, pendingTasks, inProgressTasks, submittedTasks, compleatedTasks
-        }
-
-        res.status(200).json({
-            message: "Dashboard Created Sucessfully",
-            data: dashboard,
-        });
 
     } catch (error) {
         return res.status(500).json({
@@ -568,6 +551,5 @@ export {
     taskListEmployee,
     assignedIsCompleated,
     review,
-    dashboardSuperAdmin,
-    dashboardNotSuperAdmin,
+    dashboard,
 };

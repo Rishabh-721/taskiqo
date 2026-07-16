@@ -2,18 +2,21 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Btn from '../../components/Btn';
 import API from '../../components/API';
+import {AuthContext} from "../../utils/AuthContext";
+import { useContext } from 'react';
 
 
 const Login = () => {
+    const {checkAuth} = useContext(AuthContext);
     const navigate = useNavigate();
     const [isLoading, setisLoading] = useState(false);
     const [form, setForm] = useState({
-      userEmail: "",
-      pwd: ""
+      email: "",
+      password: ""
     });
     const [error, setError] = useState({
-    userEmail: "",
-    pwd: ""
+    email: "",
+    password: ""
   });
     const [apiSucess, setApiSucess] = useState(false);
     const [apiError, setApiError] = useState("");
@@ -29,23 +32,23 @@ const Login = () => {
       e.preventDefault();
 
       const checker = ({
-        userEmail: "",
-        pwd: ""
+        email: "",
+        password: ""
       });
 
-      if(!form.userEmail || form.userEmail.length === 0){
-        checker.userEmail = "Email is required";
+      if(!form.email || form.email.length === 0){
+        checker.email = "Email is required";
       }
 
-      if(!form.pwd || form.pwd === 0){
-        checker.pwd = "Password is required";
+      if(!form.password || form.password.length === 0){
+        checker.password = "Password is required";
       }
 
-      if(form.pwd && form.pwd.length < 8){
-        checker.pwd = "Password should be atleast 8 letter";
+      if(form.password && form.password.length < 8){
+        checker.password = "Password should be atleast 8 letter";
       }
 
-      if(checker.userEmail !== "" || checker.pwd !== ""){
+      if(checker.email !== "" || checker.password !== ""){
         setError(checker);
         return
       }
@@ -56,7 +59,10 @@ const Login = () => {
         const response = await API("POST", "auth/login", form);
         setApiSucess(true);
         localStorage.setItem("token", response?.data?.token);
-        navigate("/dashboard")
+        const success = await checkAuth();
+        if(success){
+          navigate("/dashboard");
+        }
       } catch (error) {
         setApiError(error.response?.data?.message);
       }finally{
@@ -73,15 +79,15 @@ const Login = () => {
     <p>Log in to continue Taskiqo</p>
 
     <div className='field'>
-    <label htmlFor="userEmail">Email: </label>
-    <input type='email' placeholder='User Email' name='userEmail' id='userEmail' value={form.userEmail} onChange={handleChange}/>
-    {error.userEmail && <p className='error'>{error.userEmail}</p>}
+    <label htmlFor="email">Email: </label>
+    <input type='email' placeholder='User Email' name='email' id='email' value={form.email} onChange={handleChange}/>
+    {error.email && <p className='error'>{error.email}</p>}
     </div>
 
     <div className='field'>
-    <label htmlFor="pwd">Password: </label>
-    <input type='password' placeholder='User Password' name='pwd' id='pwd' value={form.pwd} onChange={handleChange}/>
-    {error.pwd && <p className='error'>{error.pwd}</p>} 
+    <label htmlFor="password">Password: </label>
+    <input type='password' placeholder='User Password' name='password' id='password' value={form.password} onChange={handleChange}/>
+    {error.password && <p className='error'>{error.password}</p>} 
     </div>
 
     <div className='ApiWaitingBtn'>

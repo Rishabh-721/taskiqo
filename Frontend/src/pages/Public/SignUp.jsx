@@ -8,15 +8,15 @@ const SignUp = () => {
     const navigate = useNavigate();
     const [isLoading, setisLoading] = useState(false);
     const [form, setForm] = useState({
-      fullName: "" ,
-      userEmail : "",
-      pwd : "",
+      name: "" ,
+      email : "",
+      password : "",
     })
 
     const [error, setError] = useState({
-      fullName: "" ,
-      userEmail : "",
-      pwd : "",
+      name: "" ,
+      email : "",
+      password : "",
     })
 
     const [apiSucess, setApiSucess] = useState(false);
@@ -37,32 +37,32 @@ const SignUp = () => {
       setError({...error, [e.target.value]: ""});
 
       const checker = ({
-        fullName: "",
-        userEmail: "",
-        pwd: "",
+        name: "",
+        email: "",
+        password: "",
       });
 
-      if(!form.fullName || form.fullName.length === 0){
-        checker.fullName = "Name Is Required";
+      if(!form.name || form.name.length === 0){
+        checker.name = "Name Is Required";
       }
 
-      if(form.fullName && form.fullName.length < 3){
-        checker.fullName = "Name Should Be Atleast 3 Letter";
+      if(form.name && form.name.length < 3){
+        checker.name = "Name Should Be Atleast 3 Letter";
       }
 
-      if(!form.userEmail || form.userEmail.length === 0){
-        checker.userEmail ="Email Is Required";
+      if(!form.email || form.email.length === 0){
+        checker.email ="Email Is Required";
       }
 
-      if(!form.pwd || form.pwd === 0){
-        checker.pwd = "Password Is Required";
+      if(!form.password || form.password === 0){
+        checker.password = "Password Is Required";
       }
 
-      if(form.pwd && form.pwd.length < 8){
-        checker.pwd = "Password Should Be Atleast 8 Letter";
+      if(form.password && form.password.length < 8){
+        checker.password = "Password Should Be Atleast 8 Letter";
       }
 
-      if(checker.fullName !== "" || checker.userEmail !== "" || checker.pwd !== ""){
+      if(checker.name !== "" || checker.email !== "" || checker.password !== ""){
         setError(checker);
         return
       }
@@ -71,7 +71,6 @@ const SignUp = () => {
         setisLoading(true);
         const response = await API("POST", "auth/Signup", form);
         setApiSucess(true);
-        
       } catch (error) {
         console.log(error.response?.data?.message);
         setApiError(error.response?.data?.message);
@@ -85,21 +84,21 @@ const SignUp = () => {
     <p>Sign up to Start Taskiqo</p>
 
     <div className='field'>
-      <label htmlFor="fullName">Name: </label>
-      <input type="text" placeholder='User Name' name='fullName' id='fullName' value={form.fullName} onChange={handleChange}/>
-      {error.fullName && <p className='error'>{error.fullName}</p>}
+      <label htmlFor="name">Name: </label>
+      <input type="text" placeholder='User Name' name='name' id='name' value={form.name} onChange={handleChange}/>
+      {error.name && <p className='error'>{error.name}</p>}
     </div>
 
     <div className='field'>
-    <label htmlFor="userEmail">Email: </label>
-    <input type='email' placeholder='User Email' name='userEmail' id='userEmail' value={form.userEmail} onChange={handleChange}/>
-    {error.userEmail && <p className='error'>{error.userEmail}</p>}
+    <label htmlFor="email">Email: </label>
+    <input type='email' placeholder='User Email' name='email' id='email' value={form.email} onChange={handleChange}/>
+    {error.email && <p className='error'>{error.email}</p>}
     </div>
 
     <div className='field'>
-    <label htmlFor="pwd">Password: </label>
-    <input type='password' placeholder='User Password' name='pwd' id='pwd' value={form.pwd} onChange={handleChange}/>
-    {error.pwd && <p className='error'>{error.pwd}</p>} 
+    <label htmlFor="password">Password: </label>
+    <input type='password' placeholder='User Password' name='password' id='password' value={form.password} onChange={handleChange}/>
+    {error.password && <p className='error'>{error.password}</p>} 
     </div>
 
     <div className='ApiWaitingBtn'>

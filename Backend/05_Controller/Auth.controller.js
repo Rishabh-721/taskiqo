@@ -6,25 +6,26 @@ import generateToken from "../04_Utils/CreatingToken.utils.js";
 const signUp = async(req, res) => {
     try {
     
-        const {fullName, userEmail, pwd} = req.body;
+        const {name, email, password} = req.body;
 
-        if(!fullName || !userEmail || !pwd){
+        if(!name || !email || !password){
             return res.status(400).json({
                 message: "Please Provide All Required Info"
             })
         }
 
-        const isExist = await User.findOne({email: userEmail});
+        const isExist = await User.findOne({ email });
 
         if(isExist){
             return res.status(400).json({
                 message: `User Already Exists, Kindly Login With Correct Info`
             })
         }
-        const hashedPwd = await hashingPwd(pwd);
+        const hashedPwd = await hashingPwd(password);
+
         const user = await User.create({
-            name: fullName,
-            email: userEmail,
+            name,
+            email,
             password: hashedPwd,
         });
 
@@ -45,15 +46,15 @@ const signUp = async(req, res) => {
 
 const login = async(req, res) => {
     try {
-        const {userEmail, pwd} = req.body;
+        const {email, password} = req.body;
 
-        if(!userEmail || !pwd){
+        if(!email || !password){
             return res.status(400).json({
                 message: "Please Provide All Required Info"
             })
         }
 
-        const user = await User.findOne({ email : userEmail }).select("+password");
+        const user = await User.findOne({ email }).select("+password");
 
         if(!user){
             return res.status(401).json({
@@ -73,7 +74,7 @@ const login = async(req, res) => {
             })
         }
 
-        const isMatch = await matchingPwd(pwd, user.password);
+        const isMatch = await matchingPwd(password, user.password);
 
         if(!isMatch){
             return res.status(401).json({
@@ -82,20 +83,17 @@ const login = async(req, res) => {
         }
 
         const data = {
-            userId: user._id,
-            userSessionVersion: user.sessionVersion,
+            id: user._id,
+            role: user.role,
+            sessionVersion: user.sessionVersion,
             purpose: "Auth",
         }
 
-        const userResponse = user.toObject();
-        delete userResponse.password;
-
-        const tokenCode = await generateToken(data, "7d");
+        const token = generateToken(data, "7d");
 
         res.status(200).json({
             message: `User Logged in Successfully`,
-            data: userResponse,
-            token: tokenCode,
+            token,
         })
 
     } catch (error) {
@@ -107,9 +105,27 @@ const login = async(req, res) => {
 
 
 const profile = async(req, res) => {
+
+    const id = req.user.id;
+
+    const user = await User.findById(id);
+
+    if(!user || user.isDeleted){
+        return res.status(401).json({
+            message: "User dosen't exist"
+        })
+    }
+
+    const userData = {
+        id : user._id,
+        name : user.name,
+        email : user.email,
+        role : user.role,
+    }
+
     res.status(200).json({
         message: "User Found Successfully",
-        data: req.user
+        data: userData,
     })
 }
 

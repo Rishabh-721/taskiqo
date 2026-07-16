@@ -5,7 +5,8 @@ Date: 10th July 2026
 Started: 20:06 
 
 Tasks:
-✅  Project setup & MongoDB connection (20:39)
+✅  Dashboard, Task and User Pages
+  Project setup & MongoDB connection (20:39)
 ✅  Environment variables & User Schema (20:09)
 ✅  Password hashing (bcrypt) & JWT auth (22:15)
 ✅  Signup & Login APIs (23:17)
@@ -85,3 +86,20 @@ Break: (16:13 - 18:06)
 # issue - while checking Every thing on login and signup page found issue API was not returning any value and no get.item was set.item was working.
 
 # resolve - this issue was happening due to vite server not restarting after changes thinking of changin it to old react so can use nodemon.
+
+# Step 6
+Date: 15th July 2026
+Started: 09:25
+
+✅ payload, Auth middleware and Profile API corrections (09: 44)
+✅ Auth Api Corrections (09:52)
+✅ Correction in Backend APIS {task, user and authApis} (10:43)
+✅ Need to correct all info correction in frontend Auth API (10:47)
+
+
+# Step 7
+Date: 16th July 2026
+Started: 10:01
+
+✅  API correction in TaskApis (12:16)
+✅  Api Intrigration And Form Prompts

@@ -15,13 +15,26 @@ const auth = async(req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        const id = decoded.userId;
-        const user = await User.findById(id);
+
+
+        const user = await User.findById(decoded.id);
 
         if(!user){
             return res.status(401).json({
                 message: `User Dosen't exist`
             })
+        }
+
+        if(user.isDeleted){
+            return res.status(401).json({
+                message: "Account has been Deleted"
+            })  
+        }
+
+        if(!user.isActive){
+            return res.status(401).json({
+                message: "Account is inactive"
+            })  
         }
 
         if (decoded.purpose !== "Auth") {
@@ -30,16 +43,23 @@ const auth = async(req, res, next) => {
             });
         }
 
-        const sessionVersion = decoded.userSessionVersion;
-        const userSession = user.sessionVersion;
+        if(decoded.role !== user.role){
+            return res.status(401).json({
+                message: "User role is incorrect, kindly relogin"
+            })
+        }
 
-        if(sessionVersion !== userSession){
+        if(decoded.sessionVersion !== user.sessionVersion){
             return res.status(401).json({
                 message: `Session expired. Please login again.`
             })
         }
 
-        req.user = user;
+        req.user = {
+            id: user._id,
+            role: user.role,
+        };
+
         next();
 
     } catch (error) {

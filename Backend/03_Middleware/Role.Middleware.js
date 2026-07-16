@@ -7,13 +7,13 @@ const role = (...roles) => {
             });
         }
 
-        if(roles.includes(req.user.role)){
-            next()
-        }else{
+        if(!roles.includes(req.user.role)){
             res.status(403).json({
                 message: "Access Denied"
             })
         }
+
+        next();
     }
 }
 

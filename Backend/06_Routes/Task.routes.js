@@ -1,7 +1,7 @@
 import { Router } from "express";
 import auth from "../03_Middleware/Auth.Middleware.js";
 import role from "../03_Middleware/Role.Middleware.js"
-import { taskCreation, taskDelete, taskReassingAdmin, taskUpdate, taskListSuperAdmin, taskListEmployee, review, assignedIsCompleated, dashboardSuperAdmin, dashboardNotSuperAdmin } from "../05_Controller/Task.controller.js";
+import { taskCreation, taskDelete, taskReassingAdmin, taskUpdate, taskListSuperAdmin, taskListEmployee, review, assignedIsCompleated, dashboard, dashboard } from "../05_Controller/Task.controller.js";
 
 const route = Router();
 
@@ -11,12 +11,12 @@ route.post("/create",auth, role("Admin"), taskCreation);
 
 // Read
 
-route.get("/dashboard/Super_Admin", auth, role("Super_Admin"), dashboardSuperAdmin);
+route.get("/dashboard/Super_Admin", auth, role("Super_Admin"), dashboard);
 route.get("/list/Super_Admin/", auth,  role("Super_Admin"), taskListSuperAdmin);
 route.get("/list/Admin/", auth,  role("Admin"), taskListSuperAdmin);
-route.get("/dashboard/Admin", auth, role("Admin"), dashboardNotSuperAdmin);
+route.get("/dashboard/Admin", auth, role("Admin"), dashboard);
 route.get("/list/Employee", auth,  role("Employee"), taskListEmployee);
-route.get("/dashboard/Employee", auth, role("Employee"), dashboardNotSuperAdmin);
+route.get("/dashboard/Employee", auth, role("Employee"), dashboard);
 
 // Update
 route.patch("/admin/:id/reassing", auth, role("Super_Admin"), taskReassingAdmin);

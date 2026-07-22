@@ -12,4 +12,4 @@ text,
   )
 }
 
-export default Btn
+export default Btn;

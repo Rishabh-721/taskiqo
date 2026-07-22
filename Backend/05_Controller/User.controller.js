@@ -69,7 +69,7 @@ import User from "../02_Model/User.model.js";
 
             
             user.isActive = false;
-            sessionVersion++;
+            user.sessionVersion++;
             await user.save()
 
             res.status(200).json({
@@ -237,7 +237,6 @@ import User from "../02_Model/User.model.js";
 
             res.status(200).json({
                 message: `User restored successfully`,
-                totalUsers: users.length,
                 data: user,
             })
 
@@ -250,9 +249,12 @@ import User from "../02_Model/User.model.js";
 
     const userListSuperAdmin = async(req, res) => {
         try {
-            const { role, isActive, isDeleted } = req.query;
+            const { role, isActive, isDeleted, search} = req.query;
+            const id = req.user.id;
 
-            const filter = {};
+            const filter = {
+                _id: { $ne: id },
+            };
 
             if(role){
                 filter.role = role;
@@ -267,7 +269,6 @@ import User from "../02_Model/User.model.js";
             }
 
             let msg;
-
 
             const users = await User.find(filter);
             

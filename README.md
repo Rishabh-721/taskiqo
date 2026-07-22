@@ -1,30 +1,33 @@
 # Taskiqo
 
-Taskiqo is a MERN stack role-based task management system that enables organizations to manage users and tasks through Role-Based Access Control (RBAC).
+Taskiqo is a MERN Stack Role-Based Task Management System that enables organizations to manage users and tasks through Role-Based Access Control (RBAC). It provides secure authentication, user management, task assignment, workflow tracking, and dashboard statistics.
 
 ---
 
-## 🚀 Features
+# 🚀 Features
 
-### Authentication
+## Authentication
 - User Signup
 - User Login
 - JWT Authentication
 - Password Hashing (bcrypt)
 - Protected Routes
 - Session Version Management
+- Authentication Context
+- Persistent Login
 
-### User Management
+## User Management
 - Super Admin
 - Admin
 - Employee
 - User Approval System
-- Activate/Deactivate Users
-- Promote/Demote Users
+- Activate / Deactivate Users
+- Promote / Demote Users
 - Soft Delete & Restore Users
-- User Search and Filtering
+- User Details Modal
+- User Search & Filtering
 
-### Task Management
+## Task Management
 - Create Task
 - Update Task
 - Delete Task
@@ -37,16 +40,16 @@ Taskiqo is a MERN stack role-based task management system that enables organizat
 - Employee Task View
 - Admin Task View
 
-### Workflow
-- Pending -> In Progress
+## Workflow
+- Pending → In Progress → Submitted → Completed
 - Task Status Updates
 - Dashboard Statistics
 
 ---
 
-## 🛠️ Tech Stack
+# 🛠️ Tech Stack
 
-### Backend
+## Backend
 - Node.js
 - Express.js
 - MongoDB
@@ -55,15 +58,18 @@ Taskiqo is a MERN stack role-based task management system that enables organizat
 - bcrypt
 - cors
 
-### Frontend 
+## Frontend
 - React
 - React Router
 - Axios
+- Context API
+- CSS
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
+```
 Backend/
 ├── 01_Database/
 ├── 02_Model/
@@ -77,40 +83,43 @@ Backend/
 Frontend/
 ├── src/
 │   ├── components/
+│   ├── context/
 │   ├── pages/
+│   ├── services/
 │   ├── App.jsx
 │   └── main.jsx
 └── package.json
+```
 
 ---
 
-## 🔐 Roles
+# 🔐 Roles
 
-### Super Admin
-- Manage users
-- Activate/Deactivate accounts
-- Promote/Demote users
-- View dashboard
-- View all tasks
-- Reassign Admin
+## Super Admin
+- Manage Users
+- Activate / Deactivate Accounts
+- Promote / Demote Users
+- Restore Deleted Users
+- View Dashboard
+- View All Tasks
 
-### Admin
-- Create tasks
-- Update tasks
-- Delete tasks
-- Assign/Reassign employees
-- Review employee Progress
-- View dashboard
+## Admin
+- Create Tasks
+- Update Tasks
+- Delete Tasks
+- Assign / Reassign Employees
+- Review Employee Progress
+- View Dashboard
 
-### Employee
-- Login after approval
-- View assigned tasks
-- Update task status
-- View personal dashboard
+## Employee
+- Login After Approval
+- View Assigned Tasks
+- Update Task Status
+- View Personal Dashboard
 
 ---
 
-## 📌 Current Status
+# 📌 Current Status
 
 - ✅ Authentication Module Completed
 - ✅ User Management Module Completed
@@ -119,13 +128,19 @@ Frontend/
 - ✅ Dashboard APIs Completed
 - ✅ Frontend Project Setup
 - ✅ Authentication UI
+- ✅ Auth Context
+- ✅ Protected Routes
+- ✅ Dashboard UI
+- ✅ User Management UI
+- ✅ User Details Modal
 - ✅ API Integration
-- ⏳ Protected Routes
+- ⏳ Reusable Filter Component
 - ⏳ Role Based Dashboards
 - ⏳ Deployment
+
 ---
 
-## 📅 Roadmap
+# 📅 Roadmap
 
 - [x] Authentication
 - [x] User Management
@@ -135,68 +150,46 @@ Frontend/
 - [x] Frontend Setup
 - [x] Authentication UI
 - [x] API Integration
-- [ ] Protected Routes
+- [x] Auth Context
+- [x] Protected Routes
+- [x] Dashboard
+- [x] User Management UI
+- [ ] Reusable Filters
 - [ ] Team Management
 - [ ] Role Based Dashboards
 - [ ] Deployment
 
 ---
 
-## 📡 API Modules
+# 📡 API Modules
 
 - Authentication APIs
 - User APIs
 - Task APIs
 - Dashboard APIs
 
-## 🏗️ Architecture
+---
 
-Client
-   │
-React
-   │
+# 🏗️ Architecture
+
+```
+Client (React)
+        │
+React Router
+        │
+Axios API Service
+        │
 Express REST API
-   │
+        │
 Authentication Middleware
-   │
+        │
 Role Middleware
-   │
+        │
 Controllers
-   │
+        │
 MongoDB
+```
 
-## 📈 Development Timeline
+# 📄 License
 
-### Day 1 (10 July 2026)
-✔ Authentication
-✔ Signup/Login
-✔ JWT
-✔ User Schema
-
-### Day 2 (11 July 2026)
-✔ RBAC
-✔ User Management
-✔ Seed Super Admin
-
-### Day 3 (12 July 2026)
-✔ Task CRUD
-✔ Assignment
-✔ Priority
-✔ Due Dates
-
-### Day 4 (13 July 2026)
-✔ Filtering
-✔ Workflow
-✔ Employee Task APIs
-✔ Dashboard APIs
-
-### Day 5 (14 July 2026)
-✔ Frontend Setup & Routing
-✔ Authentication UI (Login & Signup)
-✔ Backend API Integration
-✔ Reusable Components & UX Improvements
-
-
-## 📄 License
-
-This project is built for learning and portfolio purposes.
+This project is built for learning, portfolio, and educational purposes.

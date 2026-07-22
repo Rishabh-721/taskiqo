@@ -1,6 +1,5 @@
-import React,{useState, useEffect, createContext} from "react";
-import API from "../components/API";
-import { Navigate } from 'react-router-dom';
+import {createContext, useEffect, useState } from "react";
+import API from "../services/API";
 
 
 const AuthContext = createContext();
@@ -10,30 +9,37 @@ const AuthProvider = ({children}) => {
     const [loading, setLoading] = useState(true);
 
     const logout = () => {
+        localStorage.removeItem("token");
         setUser(null);
-        setLoading(true);
+        setLoading(false);
     }
 
     const checkAuth = async() => {
+        setLoading(true);
         try {
-            const response = await API('GET', "auth/profile");
-            setUser(response.data?.data);
+            const response = await API('GET', 'auth/profile');
+            const info = response?.data?.data;
+            setUser(info);
             return true;
         } catch (error) {
-            logout()
+            console.log(error.response?.data?.message);
+            setUser(null)
             return false;
-        } finally{
+        } finally {
             setLoading(false);
         }
     }
 
     useEffect(() => {
-        checkAuth();
-    }, []);
+    checkAuth();
+}, []);
 
-    return <AuthContext.Provider value={{user, loading, checkAuth, logout}}>
+return (
+    <AuthContext.Provider value={{user, loading, checkAuth, logout}}>
         {children}
     </AuthContext.Provider>
-}
+)
 
-export {AuthContext, AuthProvider}
+}
+ 
+export {AuthContext, AuthProvider};

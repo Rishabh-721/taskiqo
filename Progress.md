@@ -98,19 +98,126 @@ Started: 09:25
 
 
 # Step 7
+
 Date: 16th July 2026
 Started: 10:01
 
-✅ API correction in Task APIs (12:16)
-✅ Frontend API Integration (12:45)
-✅ Login Form Validation & User Feedback (13:15)
-✅ Authentication Context (Context API) (14:10)
-✅ Authentication State Management (14:40)
-✅ Protected Routes (14:58)
+Tasks
 
+✅ API Corrections in Task APIs (12:16)
+
+Break: Lunch (12:16 - 13:12)
+
+✅ API Integration Between Backend & Frontend (13:58)
+✅ Auth API Integration Corrections (14:34)
+✅ Auth Context Implementation (15:12)
+✅ Protected Routes Implementation (15:56)
+✅ Profile API Integration (16:24)
+✅ Login Session Handling (16:48)
+✅ Authentication Flow Testing (17:21)
 
 # Step 8
+
+Date: 17th July 2026
+Started: 09:18 (Approx.)
+
+Tasks
+
+✅ Dashboard API Integration (09:56)
+✅ Dashboard Statistics Cards (10:41)
+
+Break: (10:41 - 11:00)
+
+✅ Dashboard Card Components (11:38)
+✅ Dashboard UI Layout (12:26)
+
+Break: Lunch (12:26 - 13:32)
+
+✅ User List API Integration (14:17)
+✅ Task List API Integration (15:08)
+✅ API Response Handling Improvements (16:01)
+
+# Step 9
+
+Date: 18th July 2026
+Started: 09:24 (Approx.)
+
+Tasks
+
+✅ Recent Tasks Component (10:02)
+✅ User Table Layout (10:48)
+
+Break: (10:48 - 11:06)
+
+✅ Task Table Layout (11:44)
+
+Break: Lunch (11:44 - 12:50)
+
+✅ Date & Time Formatting (13:36)
+✅ Dynamic Table Rendering (14:42)
+✅ React Component Refactoring (15:54)
+✅ Dashboard UI Improvements (16:38)
+
+# Step 10
+
 Date: 19th July 2026
-Started: 17:37
+Started: 09:14 (Approx.)
 
+Tasks
 
+✅ Task List Improvements (09:58)
+✅ Frontend Query Filtering (10:44)
+
+Break: (10:44 - 11:02)
+
+✅ Dynamic API Calls (11:48)
+
+Break: Lunch (11:48 - 13:02)
+
+✅ Dashboard Improvements (14:03)
+✅ React Component Restructuring (15:17)
+✅ Planned Dashboard Redesign (16:08)
+
+# Step 11
+
+Date: 20th July 2026
+Started: 09:27 (Approx.)
+
+Tasks
+
+✅ Backend Dashboard Improvements (10:16)
+✅ API Response Verification (11:08)
+
+Break: (11:08 - 11:22)
+
+✅ Frontend Planning & Corrections (12:06)
+
+Break: Lunch (12:06 - 13:08)
+
+✅ Project Documentation Updates (14:12)
+✅ Code Cleanup & Testing (15:34)
+
+# Step 12
+
+Date: 21st July 2026
+Started: 12:18
+
+Tasks
+
+✅ User Management Table Improvements (12:46)
+✅ User Details Modal Created (13:18)
+✅ Activate / Deactivate Functionality (13:42)
+✅ Promote / Demote Functionality (13:56)
+✅ Delete / Restore Functionality (14:14)
+
+Break: (14:14 - 14:28)
+
+✅ Fixed Incorrect PATCH Routes (404) (14:46)
+✅ Fixed Backend Controller Errors (500) (15:12)
+✅ Updated Selected User After API Response (15:34)
+✅ Improved React State Management (15:56)
+✅ Redesigned User Details Modal UI (16:26)
+✅ Added Status Indicators (16:42)
+✅ Planned Reusable Filter Component (17:18)
+✅ Designed Checkbox-Based Filter UI (17:46)
+✅ Designed Generic Filter Panel for Users & Tasks (18:12)

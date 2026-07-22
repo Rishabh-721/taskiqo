@@ -218,7 +218,9 @@ const taskListSuperAdmin = async (req, res) => {
             priority,
             dueDate,
             status,
-            assignedTo
+            assignedTo,
+            limit,
+            sort = "latest"
         } = req.query;
 
         const filter = {};
@@ -243,7 +245,17 @@ const taskListSuperAdmin = async (req, res) => {
             filter["assignedTo.user"] = assignedTo;
         }
 
-        const tasks = await Task.find(filter);
+        let query = Task.find(filter);
+
+        if (sort === "latest") {
+            query = query.sort({ createdAt: -1 });
+        }
+
+        if (limit) {
+            query = query.limit(Number(limit));
+        }
+
+        const tasks = await query;
 
         let msg;
         if (tasks.length === 0) {
@@ -273,7 +285,9 @@ const taskListAdmin = async (req, res) => {
             priority,
             dueDate,
             status,
-            assignedTo
+            assignedTo,
+            limit,
+            sort = "latest"
         } = req.query;
 
         const filter = {};
@@ -296,7 +310,17 @@ const taskListAdmin = async (req, res) => {
             filter["assignedTo.user"] = assignedTo;
         }
 
-        const tasks = await Task.find(filter);
+        let query = Task.find(filter);
+
+        if (sort === "latest") {
+            query = query.sort({ createdAt: -1 });
+        }
+
+        if (limit) {
+            query = query.limit(Number(limit));
+        }
+
+        const tasks = await query;
 
         let msg;
         if (tasks.length === 0) {
@@ -326,7 +350,9 @@ const taskListEmployee = async (req, res) => {
             priority,
             dueDate,
             status,
-            isCompleted
+            isCompleted,
+            limit,
+            sort = "latest"
         } = req.query;
 
         const filter = {};
@@ -349,7 +375,17 @@ const taskListEmployee = async (req, res) => {
             filter.status = status;
         }
 
-        const tasks = await Task.find(filter);
+        let query = Task.find(filter);
+
+        if (sort === "latest") {
+            query = query.sort({ createdAt: -1 });
+        }
+
+        if (limit) {
+            query = query.limit(Number(limit));
+        }
+
+        const tasks = await query;
 
         let msg;
         if (tasks.length === 0) {
@@ -487,47 +523,54 @@ const review = async(req, res) => {
         })
     }
 }
+
 const dashboard = async(req, res) => {
     try {
-        const id = req.user.id;
-        const role = req.user.role;
 
-        let dashboardData = {};
+    const id = req.user.id;
+    const role = req.user.role;
 
-        if(role === "Super_Admin"){
-            dashboardData = {
-            totalUsers : await User.countDocuments({isDeleted : false}),
-            activeUsers : await User.countDocuments({isDeleted : false, isActive: true}),
-            inactiveUsers : await User.countDocuments({isDeleted : false, isActive: false}),
-            deletedUsers : await User.countDocuments({isDeleted: true}),
+    let dashboard = {};
 
-            isSuperAdmin : await User.countDocuments({isDeleted : false,role : "Super_Admin"}),
-            isAdmin : await User.countDocuments({isDeleted : false,role : "Admin"}),
-            isEmployee : await User.countDocuments({isDeleted : false,role : "Employee"}),
-
-            totalTasks : await Task.countDocuments(),
-            pendingTasks : await Task.countDocuments({status: "Pending"}),
-            inProgressTasks : await Task.countDocuments({status: "In-Progress"}),
-            submittedTasks : await Task.countDocuments({status: "Submitted"}),
-            completedTasks : await Task.countDocuments({status: "Compleated"}),
-            }
-        }else if(role === "Admin"){
-            dashboardData = {
-                totalTasks : await Task.countDocuments({createdBy: id}),
-                pendingTasks : await Task.countDocuments({createdBy: id, status: "Pending"}),
-                inProgressTasks : await Task.countDocuments({createdBy: id,status: "In-Progress"}),
-                submittedTasks : await Task.countDocuments({createdBy: id,status: "Submitted"}),
-                completedTasks : await Task.countDocuments({createdBy: id,status: "Compleated"}),
-            }
-        }else if (role === "Employee") {
-            dashboardData = {
-                totalTasks : await Task.countDocuments({"assignedTo.user": id}),
-                pendingTasks : await Task.countDocuments({"assignedTo.user": id, status: "Pending"}),
-                inProgressTasks : await Task.countDocuments({"assignedTo.user": id,status: "In-Progress"}),
-                submittedTasks : await Task.countDocuments({"assignedTo.user": id,status: "Submitted"}),
-                completedTasks : await Task.countDocuments({"assignedTo.user": id,status: "Compleated"}),
+    if(role === "Super_Admin"){
+    dashboard = {
+        card : {
+            users : await User.countDocuments({isDeleted: false}),
+            active : await User.countDocuments({isDeleted : false, isActive: true}),
+            admin : await User.countDocuments({isDeleted: false, role: "Admin"}),
+            totalTasks : await Task.countDocuments()
+        },
+        userStats : {
+            superAdmin : await User.countDocuments({isDeleted: false, role: "Super_Admin"}),
+            employee : await User.countDocuments({isDeleted: false, role: "Employee"}),
+            admin : await User.countDocuments({isDeleted: false, role: "Admin"}),
+    },
+        taskStat : {
+        pendingTasks : await Task.countDocuments({status: "Pending"}),
+        inProgressTasks : await Task.countDocuments({status: "In_Progress"}),
+        submittedTasks : await Task.countDocuments({status: "Submitted"}),
+        compleatedTasks : await Task.countDocuments({status: "Compleated"}),
+    }
+}
+    }else if(role === "Admin"){
+    dashboard = {
+        card : {
+            employee : await User.countDocuments({role: "Employee", isDeleted: false}),
+            myTasks : await Task.countDocuments({createdBy: id}),
+            pending : await Task.countDocuments({createdBy: id, status: "Pending"}),
+            completed : await Task.countDocuments({createdBy: id,status: "Compleated"}),
             }
         }
+    }else if (role === "Employee") {
+    dashboard = {
+        card : {
+            total : await Task.countDocuments({"assignedTo.user": id}),
+            pending : await Task.countDocuments({"assignedTo.user": id, status: "Pending"}),
+            inProgress : await Task.countDocuments({"assignedTo.user": id,status: "In-Progress"}),
+            completed : await Task.countDocuments({"assignedTo.user": id,status: "Compleated"}),
+        }
+    }
+}
 
         res.status(200).json({
             message: "Dashboard Created Sucessfully",
